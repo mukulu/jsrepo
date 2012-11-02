@@ -1,4 +1,3 @@
-<script type="text/javascript">
 $(document).ready(function() {
 	var wasDateInvestigated='83398-238613-val';
 	var investigationDate='83398-238616-val';
@@ -10,4 +9,3 @@ $(document).ready(function() {
 		};
 	});
 });
-</script>
