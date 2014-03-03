@@ -1,7 +1,7 @@
 $(document).ready(function() {
 		//Setting loading parameters
 		var lastQuarter=$( '#selectedPeriodId' ).val().split(/\Q/)[0]+'Q'+($( '#selectedPeriodId' ).val().split(/\Q/)[1]-1);
-		if( $( '#selectedPeriodId' ).val() != '2013Q4' || $( '#selectedPeriodId' ).val() != '2012Q1' ) {
+		if( $( '#selectedPeriodId' ).val() != '2013Q4' ) {
 			var params = { periodId : lastQuarter, dataSetId : $( '#selectedDataSetId' ).val(), organisationUnitId : getCurrentOrganisationUnit(), multiOrganisationUnit: dhis2.de.multiOrganisationUnit };
 			var cc = dhis2.de.getCurrentCategoryCombo();
 			var cp = dhis2.de.getCurrentCategoryOptionsQueryValue();
@@ -51,7 +51,7 @@ $(document).ready(function() {
 	$( 'body' ).bind( 'dhis-web-dataentry-form-loaded', function() {
 		//Setting loading parameters
 		var lastQuarter=$( '#selectedPeriodId' ).val().split(/\Q/)[0]+'Q'+($( '#selectedPeriodId' ).val().split(/\Q/)[1]-1);
-		if( $( '#selectedPeriodId' ).val() != '2013Q4' || $( '#selectedPeriodId' ).val() != '2012Q1' ) {
+		if( $( '#selectedPeriodId' ).val() != '2013Q4' ) {
 			var params = { periodId : lastQuarter, dataSetId : $( '#selectedDataSetId' ).val(), organisationUnitId : getCurrentOrganisationUnit(), multiOrganisationUnit: dhis2.de.multiOrganisationUnit };
 			var cc = dhis2.de.getCurrentCategoryCombo();
 			var cp = dhis2.de.getCurrentCategoryOptionsQueryValue();
