@@ -1,9 +1,5 @@
 	$(document).ready(function(){
-		//@todo use reversecode to reverse input values of target input field
 		//@todo use indicator to manouver enable/disable feture
-		//@todo put in place choice of enable/disable for multiple checkboxes(i.e. any/all disables section)
-		//@todo no value should also disable input fields
-		//@todo put in place hide and show(animated) for hide and show sections
 		var lars={};
 		lars.getDataElementsToSeal = function(selectorName) {
 			//Get all declared data elements
@@ -11,6 +7,7 @@
 				//Only bother to set on-change events for dataelements in the dictionary
 				var tdSectionNames=null,tdSections=null;
 				if(dataElement.sectionsToSeal.length>0) {
+					//compile sections to seal
 					$(dataElement.sectionsToSeal).each(function(toSealIndex,sectionToseal){
 						if($.isEmptyObject(tdSectionNames)) tdSectionNames='td.'+sectionToseal;else tdSectionNames=tdSectionNames+',td.'+sectionToSeal;
 					});
@@ -40,7 +37,9 @@
 									}else {
 										disableFields=true;
 									}
-									if(typeof(dataElement.reverseCoded)!=="undefined" && dataElement.reverseCoded==true) response= ! response;
+									if(typeof(dataElement.reverseCoded)!=="undefined" && dataElement.reverseCoded==true) {
+										response= ! response;
+									}
 									console.log( dataElement.question+':'+JSON.stringify(response).replace("true","yes").replace("false","no"));
 									//Go through found sections assoicated with this input and disable based on configurations
 									$(tdSections).each(function(tdSectIndex,tdSection){
@@ -73,7 +72,21 @@
 									}else {
 										disableFields=true;
 									}
-									if(typeof(dataElement.reverseCoded)!=="undefined" && dataElement.reverseCoded==true) response= ! response;
+									if(typeof(dataElement.reverseCoded)!=="undefined" && dataElement.reverseCoded==true) {
+										response= ! response;
+										
+										console.log('data element'+dataElement.name+' is reverse coded');
+										var reverseCodedOptions = $('#'+triggerDataElement+' option:gt(0)');
+										$(reverseCodedOptions).each(function(index,codedOption){
+											if($(codedOption).text()=="Yes") {
+												$(codedOption).val("false");
+											}else if($(codedOption).text()=="No") {
+												$(codedOption).val("true");
+											}
+											console.log('coded option');
+											console.log(codedOption);
+										});
+									}
 									console.log( dataElement.question+':'+JSON.stringify(response).replace("true","yes").replace("false","no"));
 									//Go through found sections assoicated with this input and disable based on configurations
 									$(tdSections).each(function(tdSectIndex,tdSection){
@@ -139,7 +152,7 @@
 				name:'OE5',
 				question:'Commodities received in a smaller amount than ordered',
 				triggerDataElements:['rBfygTRHACp-h7E6ZQ0MxMv-val','rBfygTRHACp-lUP491XDRgt-val','rBfygTRHACp-ZvMjnh5ggfo-val','rBfygTRHACp-BhstbsYypfl-val'],
-				sectionsToSeal:['OE5'],
+				sectionsToSeal:[],//No dataelements to seal
 				sectionsToHide:[]
 			},
 			{
@@ -317,6 +330,7 @@
 				question:'% of indeterminate/inconclusive results in the last 30 days (C). C = B/A x100',
 				triggerDataElements:['indicatorVWEu6OEvsVT'],
 				indicator:true,
+				operation: {operator:"<",value:2},
 				sectionsToSeal:['LAB5'],
 				sectionsToHide:[]
 			},
@@ -554,15 +568,15 @@
 		$("#WEC20UqrE1h-uGIJ6IdkP7Q-val").change(function() {
 			var select = $("#WEC20UqrE1h-uGIJ6IdkP7Q-val").val();
 			if(select=="false"){
-				$("#oe3").hide();
-				$("#oe4").hide();
-				$("#oe5").hide();
+				$("#oe3").hide("fast");
+				$("#oe4").hide("fast");
+				$("#oe5").hide("fast");
 				console.log('No value was captured');
 			}
 			else{
-				$("#oe3").show();
-				$("#oe4").show();
-				$("#oe5").show();
+				$("#oe3").show("fast");
+				$("#oe4").show("fast");
+				$("#oe5").show("fast");
 				console.log('Yes value was captured');
 			}
 			console.log('OE2 was changed');
@@ -573,11 +587,11 @@
 		$("#pIjv5Fx2N5y-uGIJ6IdkP7Q-val").change(function() {
 			var select = $("#pIjv5Fx2N5y-uGIJ6IdkP7Q-val").val();
 			if(select=="false"){
-				$("#oe5").hide();
+				$("#oe5").hide("fast");
 				console.log('No value was captured');
 			}
 			else{
-				$("#oe5").show();
+				$("#oe5").show("fast");
 				console.log('Yes value was captured');
 			}
 			console.log('OE4 was changed');
@@ -589,21 +603,21 @@
 		$("#Fo05hc7gc5z-Dcq5eito8bn-val").focusout(function() {
 			var select = $("#Fo05hc7gc5z-Dcq5eito8bn-val").val();
 			if(select=="false"){
-				$("#lab2").hide();
-				$("#lab3").hide();
-				$("#lab4").hide();
-				$("#lab5").hide();
-				$("#lab6").show();
-				$("#lab7").show();
+				$("#lab2").hide("fast");
+				$("#lab3").hide("fast");
+				$("#lab4").hide("fast");
+				$("#lab5").hide("fast");
+				$("#lab6").show("fast");
+				$("#lab7").show("fast");
 				console.log('No value was captured');
 			}
 			else{
-				$("#lab2").show();
-				$("#lab3").show();
-				$("#lab4").show();
-				$("#lab5").show();
-				$("#lab6").show();
-				$("#lab7").show();
+				$("#lab2").show("fast");
+				$("#lab3").show("fast");
+				$("#lab4").show("fast");
+				$("#lab5").show("fast");
+				$("#lab6").show("fast");
+				$("#lab7").show("fast");
 				console.log('Yes value was captured');
 			}
 			console.log('Lab1 was changed');
@@ -614,19 +628,20 @@
 		$("#sMvJDoWfEcN-uGIJ6IdkP7Q-val").change(function() {
 			var select = $("#sMvJDoWfEcN-uGIJ6IdkP7Q-val").val();
 			if(select=="false"){
-				$("#me2").hide();
-				$("#me3").hide();
+				$("#me2").hide("fast");
+				$("#me3").hide("fast");
+				$("#me11").show("fast");
 				console.log('No value was captured');
 			}
 			else if(select=="true"){
-				$("#me2").show();
-				$("#me3").show();
-				$("#me11").hide();
+				$("#me2").show("fast");
+				$("#me3").show("fast");
+				$("#me11").hide("fast");
 				console.log('Yes value was captured');
 			}
 			else{
-				$("#me2").show();
-				$("#me3").show();
+				$("#me2").show("fast");
+				$("#me3").show("fast");
 				console.log('Yes value was captured');
 			}
 			console.log('Lab1 was changed');
@@ -661,6 +676,108 @@
 			else{
 				$("#tle7").value=false;
 				console.log('false value was captured');
+			}
+		});
+		
+		//Hard-coded indicator change to disable section LAB5
+		$('#YfAF6UdtXWP-uGIJ6IdkP7Q-val,#l9sa7guaVae-uGIJ6IdkP7Q-val').change(function(){ 
+			var inputFieldsToDisable=$("td.LAB5").find('input');
+			//Run down all input fields to disable
+			$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
+				if($('#indicatorVWEu6OEvsVT').val()>2) {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
+					$(inputFieldToDisable).attr("disabled","disabled");
+				}else {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
+					$(inputFieldToDisable).removeAttr('disabled');
+				}
+			});
+		});
+		//Hard-coded indicator change to disable section LAB7
+		$('#kaDpb9StuY5-uGIJ6IdkP7Q-val').change(function(){ 
+			var inputFieldsToDisable=$("td.LAB7").find('input');
+			//Run down all input fields to disable
+			$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
+				if($('#indicatorlAXSzh9agQ2').val()>2) {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
+					$(inputFieldToDisable).attr("disabled","disabled");
+				}else {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
+					$(inputFieldToDisable).removeAttr('disabled');
+				}
+			});
+		});
+		//Hard-coded indicator change to disable section R3
+		$('#s6xvO1ZGftk-uGIJ6IdkP7Q-val,#r1xZURNVHxA-uGIJ6IdkP7Q-val').change(function(){ 
+			var inputFieldsToDisable=$("td.R3").find('input');
+			//Run down all input fields to disable
+			$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
+				if($('#indicatorXaj125XCVBd').val()>2) {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
+					$(inputFieldToDisable).attr("disabled","disabled");
+				}else {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
+					$(inputFieldToDisable).removeAttr('disabled');
+				}
+			});
+		});
+		//Hard-coded indicator change to disable section EID3
+		$('#q6CBLhO9o9X-uGIJ6IdkP7Q-val,#MGZ31s3ZrNu-uGIJ6IdkP7Q-val').change(function(){ 
+			var inputFieldsToDisable=$("td.EID3").find('input');
+			//Run down all input fields to disable
+			$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
+				if($('#indicatorRYx755rec4l').val()>2) {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
+					$(inputFieldToDisable).attr("disabled","disabled");
+				}else {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
+					$(inputFieldToDisable).removeAttr('disabled');
+				}
+			});
+		});
+		//First time loading of form indicator field disabling calibration
+		var inputFieldsToDisable=$("td.LAB5").find('input');
+		//Run down all input fields to disable
+		$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
+			if($('#indicatorVWEu6OEvsVT').val()>2) {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
+				$(inputFieldToDisable).attr("disabled","disabled");
+			}else {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
+				$(inputFieldToDisable).removeAttr('disabled');
+			}
+		});
+		var inputFieldsToDisable=$("td.LAB7").find('input');
+		//Run down all input fields to disable
+		$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
+			if($('#indicatorlAXSzh9agQ2').val()>2) {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
+				$(inputFieldToDisable).attr("disabled","disabled");
+			}else {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
+				$(inputFieldToDisable).removeAttr('disabled');
+			}
+		});
+		var inputFieldsToDisable=$("td.R3").find('input');
+		//Run down all input fields to disable
+		$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
+			if($('#indicatorXaj125XCVBd').val()>2) {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
+				$(inputFieldToDisable).attr("disabled","disabled");
+			}else {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
+				$(inputFieldToDisable).removeAttr('disabled');
+			}
+		});
+		var inputFieldsToDisable=$("td.EID3").find('input');
+		//Run down all input fields to disable
+		$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
+			if($('#indicatorRYx755rec4l').val()>2) {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
+				$(inputFieldToDisable).attr("disabled","disabled");
+			}else {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
+				$(inputFieldToDisable).removeAttr('disabled');
 			}
 		});
 	});
