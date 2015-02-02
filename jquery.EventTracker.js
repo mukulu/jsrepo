@@ -181,7 +181,7 @@ hotAction.afterChange = function(changes,source) {
                 dhisEvent.eventDate=dataValue["eventDate"];
                 dhisEvent.event=dataValue["eventId"];
                 dhisEvent.status="ACTIVE";
-                savingUrl='/api/events/'+dhisEvent.event;
+                savingUrl='/ards/api/events/'+dhisEvent.event;
                 savingMethod='PUT';
                 //Fetch all datavalues into the table
                 for(dataElementId in dataValue) {
@@ -213,7 +213,7 @@ hotAction.afterChange = function(changes,source) {
                 dhisEvent.status='ACTIVE';
                 dhisEvent.orgUnit=orgUnitId;
                 dhisEvent.eventDate=today.toISOString();
-                savingUrl='/api/events.json';
+                savingUrl='/ards/api/events.json';
                 savingMethod='POST';
                 //Fetch all datavalues into the table
                 for(dataElementId in dataValue) {
@@ -325,7 +325,7 @@ hotAction.beforeRemoveRow = function(rowIndex,amount){
                 && dataValue["eventId"]!==null
                 && typeof(dataValue["eventDate"])!=='undefined'
                 && dataValue["eventDate"]!==null) {
-                var deletingUrl='/api/events/'+dataValue["eventId"];
+                var deletingUrl='/ards/api/events/'+dataValue["eventId"];
                 //Remove event
                 $.ajax({
                     headers: {
@@ -401,12 +401,12 @@ hotAction.setInitialDataValues = function() {
 	}
 }
 hotAction.getEventUrl = function (orgunitId,programStageId) {
-    var dataUrl = '/api/events.json'+'?orgUnit='+orgunitId+'&programStage='+programStageId+'&paging=false';
+    var dataUrl = '/ards/api/events.json'+'?orgUnit='+orgunitId+'&programStage='+programStageId+'&paging=false';
     return dataUrl;
 };
 
 hotAction.getDataValues = function() {
-    var programsUrl =  "/api/programs.json?filter=type:eq:3&paging=false&fields=id,name,version,programStages[id,version,programStageSections[id],programStageDataElements[dataElement[id,name,type,optionSet[id,name,options[id,name],version]]]]";
+    var programsUrl =  "/ards/api/programs.json?filter=type:eq:3&paging=false&fields=id,name,version,programStages[id,version,programStageSections[id],programStageDataElements[dataElement[id,name,type,optionSet[id,name,options[id,name],version]]]]";
     $.get(programsUrl).done(function(data){
         $(data.programs).each(function(pIncr,program){
             $($("div[class='handsontable']")).each(function(hIncr,div){
