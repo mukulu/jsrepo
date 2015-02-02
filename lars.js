@@ -1,4 +1,4 @@
-	$(document).ready(function(){
+dhis2.util.on( 'dhis2.de.event.formReady', function( event, ds ) {
 		//@todo use indicator to manouver enable/disable feture
 		var lars={};
 		lars.getDataElementsToSeal = function(selectorName) {
@@ -13,8 +13,10 @@
 					});
 					var tdSections=$(tdSectionNames);
 				}
+				//console.log(tdSectionNames);
 				if(!$.isEmptyObject(tdSections) && tdSections.length>0) {
 						//For each section handle disabling of input fields;
+						//console.log(dataElement.name+' section for dataElement '+dataElement.question+'  exist');
 						//Setup all trigger dataElements
 						$(dataElement.triggerDataElements).each(function(triggerIndex,triggerDataElement){
 							//We only expect one triggerid to find one input tag,if it's not the case, screem
@@ -38,6 +40,7 @@
 									if(typeof(dataElement.reverseCoded)!=="undefined" && dataElement.reverseCoded==true) {
 										response= ! response;
 									}
+									console.log( dataElement.question+':'+JSON.stringify(response).replace("true","yes").replace("false","no"));
 									//Go through found sections assoicated with this input and disable based on configurations
 									$(tdSections).each(function(tdSectIndex,tdSection){
 										//List input fields to disable for the section
@@ -45,8 +48,10 @@
 										//Run down all input fields to disable
 										$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 											if(disableFields) {
+												//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 												$(inputFieldToDisable).attr("disabled","disabled");
 											}else {
+												//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 												$(inputFieldToDisable).removeAttr('disabled');
 											}
 										});
@@ -70,6 +75,7 @@
 									if(typeof(dataElement.reverseCoded)!=="undefined" && dataElement.reverseCoded==true) {
 										response= ! response;
 										
+										console.log('data element'+dataElement.name+' is reverse coded');
 										var reverseCodedOptions = $('#'+triggerDataElement+' option:gt(0)');
 										$(reverseCodedOptions).each(function(index,codedOption){
 											if($(codedOption).text()=="Yes") {
@@ -77,8 +83,11 @@
 											}else if($(codedOption).text()=="No") {
 												$(codedOption).val("true");
 											}
+											console.log('coded option');
+											console.log(codedOption);
 										});
 									}
+									console.log( dataElement.question+':'+JSON.stringify(response).replace("true","yes").replace("false","no"));
 									//Go through found sections assoicated with this input and disable based on configurations
 									$(tdSections).each(function(tdSectIndex,tdSection){
 										//List input fields to disable for the section
@@ -86,17 +95,23 @@
 										//Run down all input fields to disable
 										$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 											if(disableFields) {
+												//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 												$(inputFieldToDisable).attr("disabled","disabled");
 											}else {
+												//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 												$(inputFieldToDisable).removeAttr('disabled');
 											}
 										});
 
 									});
+							}else{
+								//console.log('There is a problem! more than one dataElement was found for one trigger id');
 							}
 
 						});
 
+				}else {
+					//console.log(dataElement.name+' section for dataElement '+dataElement.question+' does not exist');
 				}
 			});
 		},
@@ -556,12 +571,16 @@
 				$("#oe3").hide("fast");
 				$("#oe4").hide("fast");
 				$("#oe5").hide("fast");
+				console.log('No value was captured');
 			}
 			else{
 				$("#oe3").show("fast");
 				$("#oe4").show("fast");
 				$("#oe5").show("fast");
+				console.log('Yes value was captured');
 			}
+			console.log('OE2 was changed');
+			console.log('Value:'+$('#WEC20UqrE1h-uGIJ6IdkP7Q-val').val());
 		});
 
 		//Skip for OE4
@@ -569,10 +588,14 @@
 			var select = $("#pIjv5Fx2N5y-uGIJ6IdkP7Q-val").val();
 			if(select=="false"){
 				$("#oe5").hide("fast");
+				console.log('No value was captured');
 			}
 			else{
 				$("#oe5").show("fast");
+				console.log('Yes value was captured');
 			}
+			console.log('OE4 was changed');
+			console.log('Value:'+$('#pIjv5Fx2N5y-uGIJ6IdkP7Q-val').val());
 		});
 
 
@@ -586,6 +609,7 @@
 				$("#lab5").hide("fast");
 				$("#lab6").show("fast");
 				$("#lab7").show("fast");
+				console.log('No value was captured');
 			}
 			else{
 				$("#lab2").show("fast");
@@ -594,7 +618,10 @@
 				$("#lab5").show("fast");
 				$("#lab6").show("fast");
 				$("#lab7").show("fast");
+				console.log('Yes value was captured');
 			}
+			console.log('Lab1 was changed');
+			console.log('Value:'+$('#Fo05hc7gc5z-Dcq5eito8bn-val').val());
 		});
 
 		//Skip for M&E1
@@ -604,16 +631,21 @@
 				$("#me2").hide("fast");
 				$("#me3").hide("fast");
 				$("#me11").show("fast");
+				console.log('No value was captured');
 			}
 			else if(select=="true"){
 				$("#me2").show("fast");
 				$("#me3").show("fast");
 				$("#me11").hide("fast");
+				console.log('Yes value was captured');
 			}
 			else{
 				$("#me2").show("fast");
 				$("#me3").show("fast");
+				console.log('Yes value was captured');
 			}
+			console.log('Lab1 was changed');
+			console.log('Value:'+$('#sMvJDoWfEcN-uGIJ6IdkP7Q-val').val());
 		});
 
 
@@ -627,9 +659,11 @@
 			var tle6 = $("#PItpOPKQjR1-uGIJ6IdkP7Q-val").val();
 			if(tle5==tle6){
 				$("#tle7").value=true;
+				console.log('true value was captured');
 			}
 			else{
 				$("#tle7").value =false;
+				console.log('false value was captured');
 			}
 		});
 		$("#PItpOPKQjR1-uGIJ6IdkP7Q-val").change(function() {
@@ -637,9 +671,11 @@
 			var tle6 = $("#PItpOPKQjR1-uGIJ6IdkP7Q-val").val();
 			if(tle5==tle6){
 				$("#tle7").value =true;
+				console.log('true value was captured');
 			}
 			else{
 				$("#tle7").value=false;
+				console.log('false value was captured');
 			}
 		});
 		
@@ -649,8 +685,10 @@
 			//Run down all input fields to disable
 			$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 				if($('#indicatorVWEu6OEvsVT').val()>2) {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 					$(inputFieldToDisable).attr("disabled","disabled");
 				}else {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 					$(inputFieldToDisable).removeAttr('disabled');
 				}
 			});
@@ -661,8 +699,10 @@
 			//Run down all input fields to disable
 			$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 				if($('#indicatorlAXSzh9agQ2').val()>2) {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 					$(inputFieldToDisable).attr("disabled","disabled");
 				}else {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 					$(inputFieldToDisable).removeAttr('disabled');
 				}
 			});
@@ -673,8 +713,10 @@
 			//Run down all input fields to disable
 			$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 				if($('#indicatorXaj125XCVBd').val()>2) {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 					$(inputFieldToDisable).attr("disabled","disabled");
 				}else {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 					$(inputFieldToDisable).removeAttr('disabled');
 				}
 			});
@@ -685,8 +727,10 @@
 			//Run down all input fields to disable
 			$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 				if($('#indicatorRYx755rec4l').val()>2) {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 					$(inputFieldToDisable).attr("disabled","disabled");
 				}else {
+					//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 					$(inputFieldToDisable).removeAttr('disabled');
 				}
 			});
@@ -696,8 +740,10 @@
 		//Run down all input fields to disable
 		$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 			if($('#indicatorVWEu6OEvsVT').val()>2) {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 				$(inputFieldToDisable).attr("disabled","disabled");
 			}else {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 				$(inputFieldToDisable).removeAttr('disabled');
 			}
 		});
@@ -705,8 +751,10 @@
 		//Run down all input fields to disable
 		$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 			if($('#indicatorlAXSzh9agQ2').val()>2) {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 				$(inputFieldToDisable).attr("disabled","disabled");
 			}else {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 				$(inputFieldToDisable).removeAttr('disabled');
 			}
 		});
@@ -714,8 +762,10 @@
 		//Run down all input fields to disable
 		$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 			if($('#indicatorXaj125XCVBd').val()>2) {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 				$(inputFieldToDisable).attr("disabled","disabled");
 			}else {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 				$(inputFieldToDisable).removeAttr('disabled');
 			}
 		});
@@ -723,8 +773,10 @@
 		//Run down all input fields to disable
 		$(inputFieldsToDisable).each(function(inputToDisIndex,inputFieldToDisable){
 			if($('#indicatorRYx755rec4l').val()>2) {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been disabled");
 				$(inputFieldToDisable).attr("disabled","disabled");
 			}else {
+				//console.log($('span#'+inputFieldToDisable.id.split('-')[1]+'-optioncombo').text()+"has been enabled");
 				$(inputFieldToDisable).removeAttr('disabled');
 			}
 		});
